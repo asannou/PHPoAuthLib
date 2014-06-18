@@ -97,4 +97,44 @@ abstract class AbstractService implements ServiceInterface
 
         return preg_replace('/^.*\\\\/', '', $classname);
     }
+
+    /**
+     * Generates a random string
+     *
+     * @param int $length
+     * @return string
+     */
+    public function generateRandomString($length)
+    {
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            $random_bytes = openssl_random_pseudo_bytes($length);
+        } else {
+            $random_bytes = $this->generateRandomBytes($length);
+        }
+        $random_string = strtr(
+            base64_encode($random_bytes),
+            array(
+                '+' => '-',
+                '/' => '_',
+                '=' => '',
+            )
+        );
+        return substr($random_string, 0, $length);
+    }
+
+    /**
+     * Generates random bytes
+     *
+     * @param int $length
+     * @return string
+     */
+    public function generateRandomBytes($length)
+    {
+        $random_bytes = '';
+        for ($i = 0; $i < $length / 4; $i++) {
+            $random_number = mt_rand(-(mt_getrandmax() + 1), mt_getrandmax());
+            $random_bytes .= pack('i', $random_number);
+        }
+        return $random_bytes;
+    }
 }

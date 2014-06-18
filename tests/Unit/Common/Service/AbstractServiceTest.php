@@ -168,4 +168,44 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\\OAuth\\Common\\Http\\Uri\\UriInterface', $uri);
         $this->assertSame('https://example.com/path', $uri->getAbsoluteUri());
     }
+
+    /**
+     * @covers OAuth\Common\Service\AbstractService::__construct
+     * @covers OAuth\Common\Service\AbstractService::generateRandomBytes
+     */
+    public function testGenerateRandomBytes()
+    {
+        $service = new Mock(
+            $this->getMock('\\OAuth\\Common\\Consumer\\CredentialsInterface'),
+            $this->getMock('\\OAuth\\Common\\Http\\Client\\ClientInterface'),
+            $this->getMock('\\OAuth\\Common\\Storage\\TokenStorageInterface')
+        );
+
+        mt_srand(10000);
+
+        $this->assertSame('YAQ09dhKhyOeXf+rKGkKm8JXzqTuAj/lFB8jrsgmpzo=', base64_encode($service->generateRandomBytes(32)));
+    }
+
+    /**
+     * @covers OAuth\Common\Service\AbstractService::__construct
+     * @covers OAuth\Common\Service\AbstractService::generateRandomString
+     */
+    public function testGenerateRandomString()
+    {
+        $service = new Mock(
+            $this->getMock('\\OAuth\\Common\\Consumer\\CredentialsInterface'),
+            $this->getMock('\\OAuth\\Common\\Http\\Client\\ClientInterface'),
+            $this->getMock('\\OAuth\\Common\\Storage\\TokenStorageInterface')
+        );
+
+        mt_srand(10000);
+
+        $this->assertSame('YAQ09dhKhyOeXf-rKGkKm8JXzqTuAj_l', $service->generateRandomString(32));
+    }
+}
+
+namespace OAuth\Common\Service;
+
+function openssl_random_pseudo_bytes($length) {
+    return base64_decode('YAQ09dhKhyOeXf+rKGkKm8JXzqTuAj/lFB8jrsgmpzo=');
 }

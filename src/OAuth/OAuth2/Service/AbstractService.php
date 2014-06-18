@@ -258,13 +258,13 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
     }
 
     /**
-     * Generates a random string to be used as state
+     * Generates an authorization state
      *
      * @return string
      */
     protected function generateAuthorizationState()
     {
-        return md5(rand());
+        return $this->generateRandomString(32);
     }
 
     /**

@@ -246,15 +246,7 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
      */
     protected function generateNonce($length = 32)
     {
-        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-
-        $nonce = '';
-        $maxRand = strlen($characters)-1;
-        for ($i = 0; $i < $length; $i++) {
-            $nonce.= $characters[rand(0, $maxRand)];
-        }
-
-        return $nonce;
+        return $this->generateRandomString($length);
     }
 
     /**
